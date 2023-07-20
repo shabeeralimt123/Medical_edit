@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:medicin_app/componanats/constatnts.dart';
 import 'package:medicin_app/componanats/widgets.dart';
 import 'package:medicin_app/screen/home_screen.dart';
@@ -41,8 +40,8 @@ class _SplashState extends State<Splash> {
         body: Stack(
           children: [
             Container(
-              height: Get.height,
-              width: Get.width,
+              height: MediaQuery.of(context).size.height,
+              width:MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/pattern.jpg'),

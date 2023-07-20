@@ -1,15 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:medicin_app/componanats/constatnts.dart';
+import 'package:medicin_app/componanats/nav_bar.dart';
+import 'package:medicin_app/componanats/widgets.dart';
 import 'package:medicin_app/db/medicin.dart';
+import 'package:medicin_app/provider/bottom_nav_provider.dart';
 import 'package:medicin_app/provider/meidcin_provider.dart';
+import 'package:medicin_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
+  Home({Key? key}) : super(key: key);
+
   @override
-  _HomeState createState() => _HomeState();
+  Widget build(BuildContext context) {
+    return Consumer<BottomNavProvider>(builder: (context, snapshot, _) {
+      return Scaffold(
+        bottomNavigationBar: HomeBottomNav(
+            onChange: (int val) async {
+              await Provider.of<BottomNavProvider>(context, listen: false)
+                  .onBarChanged(val);
+            },
+            curIndex: snapshot.currentIndex),
+        body: snapshot.currentPage,
+      );
+    });
+  }
 }
 
-class _HomeState extends State<Home> {
+class HomeHeader extends StatefulWidget {
+  @override
+  _HomeHeaderState createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<HomeHeader> {
   @override
   void initState() {
     super.initState();
@@ -21,7 +44,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Constants.primaryColor,
-        title: Text('Medical List'),
+        title: Text('Add your medical price and name'),
       ),
       body: Consumer<AddItemProvider>(builder: (context, snapshot, _) {
         return ListView.builder(
@@ -30,14 +53,26 @@ class _HomeState extends State<Home> {
             final medicine = snapshot.itemList.getAt(index)!;
             return ListTile(
               title: Text(medicine.name),
-              subtitle: Text('Quantity: ${medicine.quantity}'),
+              subtitle: Text('Price: ${medicine.price}'),
               trailing: IconButton(
                 icon: Icon(
                   Icons.delete,
                   color: Colors.red,
                 ),
                 onPressed: () {
-                  snapshot.deleteMedicine(index);
+                  showDialogueBox(
+                    context,
+                    message:
+                        "Are you sure you want delete this Tablet? You cannot undo this action!",
+                    button1: "Yes, delete",
+                    button2: "No",
+                    onCompleted: () {
+                      snapshot.deleteMedicine(index);
+                      snack(text: "tablet Deleted");
+                    },
+                    title: "Delete this tablet ?",
+                    showCancelButton: true,
+                  );
                 },
               ),
               onTap: () {
@@ -100,7 +135,7 @@ class _HomeState extends State<Home> {
                     .addMedicine(
                         nameController.text,
                         int.parse(quantityController.text),
-                        int.parse(priceController.text));
+                        double.parse(priceController.text));
                 Navigator.of(context).pop();
               },
             ),
@@ -156,7 +191,7 @@ class _HomeState extends State<Home> {
                         index,
                         nameController.text,
                         int.parse(quantityController.text),
-                        int.parse(priceController.text));
+                        double.parse(priceController.text));
                 Navigator.of(context).pop();
               },
             ),

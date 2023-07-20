@@ -19,7 +19,7 @@ class MedicineAdapter extends TypeAdapter<Medicine> {
     return Medicine(
       fields[0] as String,
       fields[1] as int,
-      fields[2] as int,
+      fields[2] as double,
     );
   }
 

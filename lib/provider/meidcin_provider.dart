@@ -7,7 +7,7 @@ class AddItemProvider extends ChangeNotifier {
 
   Box<Medicine> get itemList => _itemList!;
 
-  addMedicine(String name, int quantity, int price) {
+  addMedicine(String name, int quantity, double price) {
     final medicineBox = Hive.box<Medicine>('medicineBox');
     _itemList = medicineBox;
     _itemList!.add(Medicine(name, quantity, price));
@@ -20,7 +20,7 @@ class AddItemProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateMedicine(int index, String name, int quantity, int price) {
+  updateMedicine(int index, String name, int quantity, double price) {
     final medicineBox = Hive.box<Medicine>('medicineBox');
     final medicine = medicineBox.getAt(index);
     medicine!.name = name;

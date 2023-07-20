@@ -9,8 +9,8 @@ class Medicine extends HiveObject {
 
   @HiveField(1)
   late int quantity;
-   @HiveField(2)
-  late int price;
+  @HiveField(2)
+late double price;
 
   Medicine(this.name, this.quantity,this.price);
 }
